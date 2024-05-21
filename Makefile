@@ -7,7 +7,7 @@ append_cb: append_cb.c htslib/libhts.a libdeflate/build/libdeflate.a jemalloc/li
 	gcc append_cb.c -o $@ ${CFLAGS} ${INCLUDES}
 
 
-jemalloc/lib/jemalloc.a:
+jemalloc/lib/libjemalloc.a:
 	cd jemalloc && ./autogen.sh --enable-prof && make build_lib_static
 
 libdeflate/build/libdeflate.a:
