@@ -1,6 +1,7 @@
 /* The pupose of this code is to demonstrate the library apis and need proper error handling and
    optimization */
 
+#include <jemalloc/jemalloc.h>
 #include <getopt.h>
 #include <unistd.h>
 #include <htslib/sam.h>
@@ -14,6 +15,9 @@ static void print_usage(FILE *fp)
   fprintf(fp, "Usage: append_tag infile outfile val\n\
 append 'val' to the 'CB' tag for all alignments\n");
 }
+
+
+const char *malloc_conf = "background_thread:true,metadata_thp:auto,dirty_decay_ms:30000,muzzy_decay_ms:30000";
 
 size_t concat(const char* a, const char* b, char **out)
 {
@@ -63,8 +67,8 @@ int main(int argc, char *argv[])
 	fprintf(stderr, "Could not open std output\n");
 	goto end;
   }
-  hts_set_threads(infile, n_threads - 1);
-  hts_set_threads(outfile, n_threads - 1);
+  hts_set_threads(infile, n_threads);
+  hts_set_threads(outfile, n_threads);
 
   if (!(in_samhdr = sam_hdr_read(infile))) {
 	fprintf(stderr, "Failed to read header from file!\n");
@@ -78,7 +82,7 @@ int main(int argc, char *argv[])
 
   long long entries = 0;
   while ((ret_r = sam_read1(infile, in_samhdr, bamdata)) >= 0) {
-	fprintf(stderr, "\r% 16d", ++entries);
+	//fprintf(stderr, "\r% 16d", ++entries);
 	errno = 0;
 	// update aux
 	if (!(data = bam_aux_get(bamdata, tag))) {
@@ -108,7 +112,7 @@ int main(int argc, char *argv[])
 
   ret = EXIT_SUCCESS;
 end:
-  //fprintf(stderr, "entries missing CB tag: %ull\n", missing_CB);
+  fprintf(stderr, "entries missing CB tag: %ull\n", missing_CB);
   //cleanup
   if (in_samhdr) {
 	sam_hdr_destroy(in_samhdr);
