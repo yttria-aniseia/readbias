@@ -13,14 +13,20 @@ git submodule update --init --recursive --depth=1
 make
 ```
 
+This repository links against static versions of
+ - https://github.com/samtools/htslib (https://doi.org/10.1093/gigascience/giab007)
+ - https://github.com/ebiggers/libdeflate
+, dependencies which are managed as git submodules.
+
+
 ## Usage
 ```
-./appendcb in.bam out.bam value threads
+./append_cb in.bam out.bam value threads
 ```
 
 Typical output:
 ```
-# ./appendcb in.bam out.bam NNATG 24
+# ./append_cb in.bam out.bam NNATG 24
 entries missing CB tag: 0
 ```
 the order of aux tags in out.bam is not guaranteed, but they should still  
