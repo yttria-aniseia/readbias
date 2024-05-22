@@ -1,24 +1,25 @@
+MAKEFLAGS += --no-builtin-rules
 CFLAGS = -O3 -flto -mtune=native
-INCLUDES = -I htslib/ -I jemalloc/include htslib/libhts.a libdeflate/build/libdeflate.a -lcrypto -lm -lpthread -lcurl -llzma -lz -lbz2 jemalloc/lib/libjemalloc.a
-
+INCLUDES = -I htslib/ htslib/libhts.a libdeflate/build/libdeflate.a -lcrypto -lm -lpthread -lcurl -llzma -lz -lbz2
+export CC=gcc
+export ARFLAGS:=--plugin=$(shell gcc --print-file-name=liblto_plugin.so)
+export NM=gcc-nm
+export RANLIB=gcc-ranlib
 LIBDEFLATE_OPTS = -DLIBDEFLATE_BUILD_STATIC_LIB=ON -DLIBDEFLATE_BUILD_SHARED_LIB=OFF -DLIBDEFLATE_BUILD_GZIP=OFF
 
-append_cb: append_cb.c htslib/libhts.a libdeflate/build/libdeflate.a jemalloc/lib/libjemalloc.a
+append_cb: append_cb.c htslib/libhts.a libdeflate/build/libdeflate.a
 	gcc append_cb.c -o $@ ${CFLAGS} ${INCLUDES}
 
 
-jemalloc/lib/libjemalloc.a:
-	cd jemalloc && ./autogen.sh && make build_lib_static
-
 libdeflate/build/libdeflate.a:
-	cd libdeflate && cmake -B build ${LIBDEFLATE_OPTS} && cmake --build build
+	cd libdeflate && CFLAGS="-fPIC -O2" LDFLAGS="-flto" cmake -B build ${LIBDEFLATE_OPTS} && cmake --build build
 
 htslib/htscodecs/:
 	git submodule update --init --recursive
 
 htslib/Makefile: libdeflate/build/libdeflate.a
 	cd htslib && autoreconf -i
-	cd htslib && CFLAGS="-flto -I ../libdeflate/" LDFLAGS="-L ../libdeflate/build/" ./configure --with-libdeflate
+	cd htslib && CFLAGS="-fPIC -O2 -I ../libdeflate/" LDFLAGS="-flto -L ../libdeflate/build/" ./configure --with-libdeflate
 
 htslib/libhts.a: htslib/htscodecs/ htslib/Makefile
 	make -C htslib lib-static
