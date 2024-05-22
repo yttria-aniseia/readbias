@@ -23,21 +23,20 @@ Typical output:
 # ./appendcb in.bam out.bam NNATG 24
 entries missing CB tag: 0
 ```
-the order of aux tags in out.bam is not guaranteed,
-but they should still be present and identical,
-with the exception of "CB" which will have the value
-specified appended to its contents.
+the order of aux tags in out.bam is not guaranteed, but they should still  
+be present and identical, with the exception of "CB" which will have the  
+value specified appended to its contents.
 
-all messages are reported on stderr, and stdin/stdout
-may be used by specifying the filename `-`
+all messages are reported on stderr, and stdin/stdout may be used by  
+specifying the filename `-`
 
-there are currently no settings other than the number of threads to use.
-"24" is the suggested maximum -- single-file decoding in htslib doesn't
+there are currently no settings other than the number of threads to use.  
+"24" is the suggested maximum -- single-file decoding in htslib doesn't  
 scale past this number.
 
-an approximate memory usage for 24 threads might be 36MB.
-memory requirements has not been exhaustively tested but is assumed to be
+an approximate memory usage for 24 threads might be 36MB.  
+memory requirements has not been exhaustively tested but is assumed to be  
 on the order of 2MB per thread.
 
-processed 27,432,660 BAM entries in 33.37s @ 24 threads on an AMD EPYC 7H12
+processed 27,432,660 BAM entries in 33.37s @ 24 threads on an AMD EPYC 7H12  
 (822,075 it/s)
