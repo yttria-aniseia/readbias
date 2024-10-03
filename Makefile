@@ -7,8 +7,8 @@ export NM=gcc-nm
 export RANLIB=gcc-ranlib
 LIBDEFLATE_OPTS = -DLIBDEFLATE_BUILD_STATIC_LIB=ON -DLIBDEFLATE_BUILD_SHARED_LIB=OFF -DLIBDEFLATE_BUILD_GZIP=OFF
 
-append_cb: append_cb.c htslib/libhts.a libdeflate/build/libdeflate.a
-	gcc append_cb.c -o $@ ${CFLAGS} ${INCLUDES}
+readbias: readbias.c htslib/libhts.a libdeflate/build/libdeflate.a
+	gcc readbias.c -o $@ ${CFLAGS} ${INCLUDES}
 
 
 libdeflate/build/libdeflate.a:
