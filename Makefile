@@ -1,5 +1,5 @@
 MAKEFLAGS += --no-builtin-rules
-CFLAGS = -O3 -flto -mtune=native
+CFLAGS = -O3 -flto -mtune=native -g
 INCLUDES = -I htslib/ htslib/libhts.a libdeflate/build/libdeflate.a -lcrypto -lm -lpthread -lcurl -llzma -lz -lbz2
 export CC=gcc
 export ARFLAGS:=--plugin=$(shell gcc --print-file-name=liblto_plugin.so)

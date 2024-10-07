@@ -77,7 +77,7 @@ int main(int argc, char *argv[])
 	int ret = EXIT_FAILURE, ret_r = 0;
 
 	// readbias -r ref -t 12 -h 12 -b 100 r1 r2
-	if (argc <= 2 || argc >= 9) {
+	if (argc <= 2 || argc >= 12) {
 		print_usage(stderr);
 		goto end; // error goto my beloved
 	}
