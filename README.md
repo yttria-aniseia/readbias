@@ -9,6 +9,7 @@ mapping bias in a dataset.
 ## Setup
 ```
 git clone git@github.com:yttria-aniseia/readbias.git
+cd readbias
 git submodule update --init --recursive --depth=1
 make
 ```
